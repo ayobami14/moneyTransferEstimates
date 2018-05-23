@@ -1,0 +1,50 @@
+body {
+	background: #141414;
+}
+
+#transferEstimates {
+	margin-top: 20px;
+}
+
+.labelText {
+	color: white;
+}
+
+.center-text {
+	text-align: center;
+}
+
+#quote-btn {
+	background: #CFCFCF;
+	color: #141414;
+
+}
+
+.quotes-row {
+	margin-top: 20px;
+}
+
+.card-label {
+	width: 50%;
+	text-align: left;
+}
+
+.card-value {
+	width: 50%;
+	text-align: right;
+}
+
+.card-body-row {
+	margin: 5px 0px 0px;
+}
+
+.transferEstimates-hr {
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+#quote-details {
+	margin-top: 15px;
+	margin-bottom: 0px;
+	font-weight: bold;
+}
