@@ -3,12 +3,30 @@ import ReactDOM from 'react-dom';
 
 require('../style/index.css');
 
+const USD_NGN_RATE = 363;
+
 class Quotes extends React.Component {
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
+		let recieveAmount = this.props.recieveAmount;
+
+		let bankFees = 50 * USD_NGN_RATE;
+		let commission = 0.005 * recieveAmount;
+		let vat = 0.05 * commission;
+
+		let fees = bankFees + commission + vat;
+		let total = recieveAmount * USD_NGN_RATE + fees;
+
+		let sendAmount = recieveAmount * USD_NGN_RATE;
+
+		sendAmount = sendAmount.toLocaleString("en-US");
+		recieveAmount = recieveAmount.toLocaleString("en-US");
+		fees = fees.toLocaleString("en-US");
+		total = total.toLocaleString("en-US");
+
 		return (
 			<div className='col-sm-4'>
 				<div className="card">
@@ -21,7 +39,7 @@ class Quotes extends React.Component {
 								You Pay
 							</div>
 							<div className='card-value col-xs-6'>
-								N378,000
+								N{total}
 							</div>
 						</div>
 						<div className='row card-body-row'>
@@ -29,7 +47,7 @@ class Quotes extends React.Component {
 								Recipient Recieves
 							</div>
 							<div className='card-value col-xs-6'>
-								$1,000
+								${recieveAmount}
 							</div>
 						</div>
 						<p id='quote-details'>Details</p>
@@ -40,7 +58,7 @@ class Quotes extends React.Component {
 								Send Amount
 							</div>
 							<div className='card-value col-xs-6'>
-								N360,000
+								N{sendAmount}
 							</div>
 						</div>
 
@@ -50,7 +68,7 @@ class Quotes extends React.Component {
 								Fees
 							</div>
 							<div className='card-value col-xs-6'>
-								N18,000
+								N{fees}
 							</div>
 						</div>
 
@@ -60,7 +78,7 @@ class Quotes extends React.Component {
 								Total
 							</div>
 							<div className='card-value col-xs-6'>
-								N378,000
+								N{total}
 							</div>
 						</div>
 
@@ -132,7 +150,7 @@ class TransferEstimates extends React.Component {
 					</button>
 				</div>
 				<div className='quotes-row row justify-content-center'>
-					<Quotes />
+					<Quotes recieveAmount={this.state.recieveAmount}/>
 				</div>
 			</div>
 		);
