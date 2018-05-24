@@ -1,9 +1,9 @@
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
-
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
+const IndexController = require('./api/controllers/indexController.js')
 
 const app = express();
 
@@ -19,18 +19,14 @@ app.use(webpackDevMiddleware(compiler, {
 // View Engine
 app.set('view engine', 'ejs');
 
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Routes
-app.get('/', (req, res) => res.render('index', {
-	title: 'Transfer Estimates'
-}));
+app.use('/', IndexController)
 
 app.listen(3000, () => console.log('Transfer Estimates listening on port 3000!'));
-
 
 // TODO: Catch errors (404, 500). 'http-errors'

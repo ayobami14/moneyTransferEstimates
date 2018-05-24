@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 require('../style/index.css');
 
 const USD_NGN_RATE = 363;
+const BTC_USD_PRICE = window.transferEstimate.BTC_USD_PRICE;
+const BTC_NGN_PRICE = window.transferEstimate.BTC_NGN_PRICE;
 
 class Quotes extends React.Component {
 
@@ -125,11 +127,9 @@ class TransferEstimates extends React.Component {
 	calculateDigitalCurrencyQuote() {
 		let recieveAmount = this.state.recieveAmount;
 
-		let BTC_USD_RATE = 7563;
-		let BTC_NGN_RATE = 2792331;
 
-		let BTC_TO_BUY = recieveAmount / BTC_USD_RATE;
-		let BTC_BUY_COST = BTC_TO_BUY * BTC_NGN_RATE;
+		let BTC_TO_BUY = recieveAmount / BTC_USD_PRICE;
+		let BTC_BUY_COST = BTC_TO_BUY * BTC_NGN_PRICE;
 
 		let sendAmount = recieveAmount * USD_NGN_RATE;
 		let fees = BTC_BUY_COST - sendAmount;
@@ -149,8 +149,19 @@ class TransferEstimates extends React.Component {
 	}
 
 	render() {
-		let bankQuote = this.calculateBankQuote();
-		let digitalCurrencyQuote = this.calculateDigitalCurrencyQuote();
+		let quotes;
+
+		if (this.state.quotesVisible) {
+			let bankQuote = this.calculateBankQuote();
+			let digitalCurrencyQuote = this.calculateDigitalCurrencyQuote();
+
+			quotes = (
+				<div className='quotes-row row justify-content-center'>
+					<Quotes title='Bank' {...bankQuote}/>
+					<Quotes title='Digital Currency' {...digitalCurrencyQuote}/>
+				</div>
+			);
+		}
 
 		return (
 			<div id='transferEstimates' className='container-fluid'>
@@ -184,10 +195,7 @@ class TransferEstimates extends React.Component {
 						Get Quote
 					</button>
 				</div>
-				<div className='quotes-row row justify-content-center'>
-					<Quotes title='Bank' {...bankQuote}/>
-					<Quotes title='Digital Currency' {...digitalCurrencyQuote}/>
-				</div>
+				{quotes}
 			</div>
 		);
 	}

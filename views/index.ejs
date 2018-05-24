@@ -10,8 +10,16 @@
     <!-- CSS -->
     <link rel="stylesheet" href="/style/bootstrap.min.css">
   </head>
+
   <body>
     <div id="root"> </div>
+    <script type="text/javascript">
+      window.transferEstimate = {
+        BTC_NGN_PRICE: <%= BTC_NGN_PRICE %>,
+        BTC_USD_PRICE: <%= BTC_USD_PRICE %>
+      }
+    </script>
     <script type="text/javascript" src="/transferEstimate.bundle.js"></script>
   </body>
+
 </html>
