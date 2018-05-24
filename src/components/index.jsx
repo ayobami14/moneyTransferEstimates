@@ -11,7 +11,7 @@ class Quotes extends React.Component {
 
 	render() {
 		return (
-			<div className='col-sm-4'>
+			<div className='col-sm-4 quote'>
 				<div className="card">
 					<div className="card-header">
 						{this.props.title}
@@ -156,7 +156,7 @@ class TransferEstimates extends React.Component {
 			let digitalCurrencyQuote = this.calculateDigitalCurrencyQuote();
 
 			quotes = (
-				<div className='quotes-row row justify-content-center'>
+				<div className='row justify-content-center'>
 					<Quotes title='Bank' {...bankQuote}/>
 					<Quotes title='Digital Currency' {...digitalCurrencyQuote}/>
 				</div>
