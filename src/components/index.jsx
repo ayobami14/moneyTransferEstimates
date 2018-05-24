@@ -6,32 +6,13 @@ require('../style/index.css');
 const USD_NGN_RATE = 363;
 
 class Quotes extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 
 	render() {
-		let recieveAmount = this.props.recieveAmount;
-
-		let bankFees = 50 * USD_NGN_RATE;
-		let commission = 0.005 * recieveAmount;
-		let vat = 0.05 * commission;
-
-		let fees = bankFees + commission + vat;
-		let total = recieveAmount * USD_NGN_RATE + fees;
-
-		let sendAmount = recieveAmount * USD_NGN_RATE;
-
-		sendAmount = sendAmount.toLocaleString("en-US");
-		recieveAmount = recieveAmount.toLocaleString("en-US");
-		fees = fees.toLocaleString("en-US");
-		total = total.toLocaleString("en-US");
-
 		return (
 			<div className='col-sm-4'>
 				<div className="card">
 					<div className="card-header">
-						Bank
+						{this.props.title}
 					</div>
 					<div className="card-body">
 						<div className='row card-body-row'>
@@ -39,7 +20,7 @@ class Quotes extends React.Component {
 								You Pay
 							</div>
 							<div className='card-value col-xs-6'>
-								N{total}
+								N{this.props.total}
 							</div>
 						</div>
 						<div className='row card-body-row'>
@@ -47,7 +28,7 @@ class Quotes extends React.Component {
 								Recipient Recieves
 							</div>
 							<div className='card-value col-xs-6'>
-								${recieveAmount}
+								${this.props.recieveAmount}
 							</div>
 						</div>
 						<p id='quote-details'>Details</p>
@@ -58,7 +39,7 @@ class Quotes extends React.Component {
 								Send Amount
 							</div>
 							<div className='card-value col-xs-6'>
-								N{sendAmount}
+								N{this.props.sendAmount}
 							</div>
 						</div>
 
@@ -68,7 +49,7 @@ class Quotes extends React.Component {
 								Fees
 							</div>
 							<div className='card-value col-xs-6'>
-								N{fees}
+								N{this.props.fees}
 							</div>
 						</div>
 
@@ -78,7 +59,7 @@ class Quotes extends React.Component {
 								Total
 							</div>
 							<div className='card-value col-xs-6'>
-								N{total}
+								N{this.props.total}
 							</div>
 						</div>
 
@@ -116,7 +97,61 @@ class TransferEstimates extends React.Component {
 		});
 	}
 
+	calculateBankQuote() {
+		let recieveAmount = this.state.recieveAmount;
+
+		let bankFees = 50 * USD_NGN_RATE;
+		let commission = 0.005 * recieveAmount;
+		let vat = 0.05 * commission;
+
+		let fees = bankFees + commission + vat;
+		let total = recieveAmount * USD_NGN_RATE + fees;
+
+		let sendAmount = recieveAmount * USD_NGN_RATE;
+
+		sendAmount = sendAmount.toLocaleString("en-US");
+		recieveAmount = recieveAmount.toLocaleString("en-US");
+		fees = fees.toLocaleString("en-US");
+		total = total.toLocaleString("en-US");
+
+		return {
+			sendAmount,
+			recieveAmount,
+			fees,
+			total
+		};
+	}
+
+	calculateDigitalCurrencyQuote() {
+		let recieveAmount = this.state.recieveAmount;
+
+		let BTC_USD_RATE = 7563;
+		let BTC_NGN_RATE = 2792331;
+
+		let BTC_TO_BUY = recieveAmount / BTC_USD_RATE;
+		let BTC_BUY_COST = BTC_TO_BUY * BTC_NGN_RATE;
+
+		let sendAmount = recieveAmount * USD_NGN_RATE;
+		let fees = BTC_BUY_COST - sendAmount;
+		let total = sendAmount + fees;
+
+		sendAmount = sendAmount.toLocaleString("en-US");
+		recieveAmount = recieveAmount.toLocaleString("en-US");
+		fees = fees.toLocaleString("en-US");
+		total = total.toLocaleString("en-US");
+
+		return {
+			sendAmount,
+			recieveAmount,
+			fees,
+			total
+		};
+	}
+
 	render() {
+		let bankQuote = this.calculateBankQuote();
+		let digitalCurrencyQuote = this.calculateDigitalCurrencyQuote();
+
 		return (
 			<div id='transferEstimates' className='container-fluid'>
 				<div className='row justify-content-center'>
@@ -150,7 +185,8 @@ class TransferEstimates extends React.Component {
 					</button>
 				</div>
 				<div className='quotes-row row justify-content-center'>
-					<Quotes recieveAmount={this.state.recieveAmount}/>
+					<Quotes title='Bank' {...bankQuote}/>
+					<Quotes title='Digital Currency' {...digitalCurrencyQuote}/>
 				</div>
 			</div>
 		);
