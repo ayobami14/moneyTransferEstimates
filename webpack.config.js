@@ -3,7 +3,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
 	mode: 'development',
-	entry: './src/components/index.jsx',
+	entry: path.resolve(__dirname, 'src/components/index.jsx'),
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'transferEstimate.bundle.js',
@@ -28,7 +28,7 @@ module.exports = {
 	},
 	plugins: [
 		new CopyWebpackPlugin([
-			{from: 'assets', to:''}
+			{from: path.resolve(__dirname, 'assets'), to:''}
 		], {})
 	]
 };
