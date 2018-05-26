@@ -2,14 +2,12 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-	mode: 'development',
 	entry: path.resolve(__dirname, 'src/components/index.jsx'),
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'transferEstimate.bundle.js',
 		publicPath: '/'
 	},
-	devtool: 'inline-source-map',
 	module: {
 		rules: [
 			{
