@@ -48,3 +48,20 @@ body {
 	margin-bottom: 0px;
 	font-weight: bold;
 }
+
+.cheapest-badge {
+	position: absolute;
+	top: -15px;
+	left: -10px;
+	padding: 5px 25px;
+	border-radius: 3px;
+	color: white;
+	text-align: center;
+	text-transform: uppercase;
+	font-family: Montserrat;
+	z-index: 1;
+}
+
+.card-header {
+	text-align: center;
+}

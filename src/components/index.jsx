@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
 require('../style/index.css');
 
@@ -7,12 +8,18 @@ const USD_NGN_RATE = 363;
 const BTC_USD_PRICE = window.transferEstimate.BTC_USD_PRICE;
 const BTC_NGN_PRICE = window.transferEstimate.BTC_NGN_PRICE;
 
-class Quotes extends React.Component {
-
+class Quotes extends React.PureComponent {
 	render() {
+		let cheapestBadge;
+
+		if (this.props.isCheapest) {
+			cheapestBadge = <div class='cheapest-badge bg-info'>Cheapest</div>;
+		}
+
 		return (
 			<div className='col-sm-4 quote'>
 				<div className="card">
+					{cheapestBadge}
 					<div className="card-header">
 						{this.props.title}
 					</div>
@@ -72,7 +79,15 @@ class Quotes extends React.Component {
 	}
 }
 
-class TransferEstimates extends React.Component {
+Quotes.PropTypes = {
+	sendAmount: PropTypes.string.isRequired,
+	recieveAmount: PropTypes.string.isRequired,
+	fees: PropTypes.string.isRequired,
+	total: PropTypes.string.isRequired,
+	isCheapest: PropTypes.bool.isRequired,
+};
+
+class TransferEstimates extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -154,6 +169,9 @@ class TransferEstimates extends React.Component {
 		if (this.state.quotesVisible) {
 			let bankQuote = this.calculateBankQuote();
 			let digitalCurrencyQuote = this.calculateDigitalCurrencyQuote();
+
+			bankQuote.isCheapest = bankQuote.total < digitalCurrencyQuote.total;
+			digitalCurrencyQuote.isCheapest = digitalCurrencyQuote.total <= bankQuote.total;
 
 			quotes = (
 				<div className='row justify-content-center'>
