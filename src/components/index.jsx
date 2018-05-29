@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import request from 'superagent';
 
 require('../style/index.css');
 
@@ -13,7 +14,7 @@ class Quotes extends React.PureComponent {
 		let cheapestBadge;
 
 		if (this.props.isCheapest) {
-			cheapestBadge = <div class='cheapest-badge bg-info'>Cheapest</div>;
+			cheapestBadge = <div className='cheapest-badge bg-info'>Cheapest</div>;
 		}
 
 		return (
@@ -79,7 +80,7 @@ class Quotes extends React.PureComponent {
 	}
 }
 
-Quotes.PropTypes = {
+Quotes.propTypes = {
 	sendAmount: PropTypes.string.isRequired,
 	recieveAmount: PropTypes.string.isRequired,
 	fees: PropTypes.string.isRequired,
@@ -87,7 +88,7 @@ Quotes.PropTypes = {
 	isCheapest: PropTypes.bool.isRequired,
 };
 
-class TransferEstimates extends React.PureComponent {
+class TransferEstimates extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -100,6 +101,7 @@ class TransferEstimates extends React.PureComponent {
 		this.handleGetQuoteClick = this.handleGetQuoteClick.bind(this);
 	}
 
+
 	onRecieveAmountChange(evt) {
 		evt.preventDefault();
 		this.setState({
@@ -109,9 +111,22 @@ class TransferEstimates extends React.PureComponent {
 
 	handleGetQuoteClick(evt) {
 		evt.preventDefault();
+
+		this.setQuotes();
+
 		this.setState({
 			quotesVisible: true
 		});
+
+		request
+			.post('/api/quote')
+			.send({
+				recieveAmount: this.state.recieveAmount,
+				bankQuote: this.bankQuote,
+				digitalCurrencyQuote: this.digitalCurrencyQuote
+			})
+			.set('accept', 'json')
+			.end();
 	}
 
 	calculateBankQuote() {
@@ -142,7 +157,6 @@ class TransferEstimates extends React.PureComponent {
 	calculateDigitalCurrencyQuote() {
 		let recieveAmount = this.state.recieveAmount;
 
-
 		let BTC_TO_BUY = recieveAmount / BTC_USD_PRICE;
 		let BTC_BUY_COST = BTC_TO_BUY * BTC_NGN_PRICE;
 
@@ -163,20 +177,23 @@ class TransferEstimates extends React.PureComponent {
 		};
 	}
 
+	setQuotes() {
+		this.bankQuote = this.calculateBankQuote();
+		this.digitalCurrencyQuote = this.calculateDigitalCurrencyQuote();
+
+		this.bankQuote.isCheapest = this.bankQuote.total < this.digitalCurrencyQuote.total;
+		this.digitalCurrencyQuote.isCheapest = this.digitalCurrencyQuote.total <= this.bankQuote.total;
+	}
+
+
 	render() {
 		let quotes;
 
 		if (this.state.quotesVisible) {
-			let bankQuote = this.calculateBankQuote();
-			let digitalCurrencyQuote = this.calculateDigitalCurrencyQuote();
-
-			bankQuote.isCheapest = bankQuote.total < digitalCurrencyQuote.total;
-			digitalCurrencyQuote.isCheapest = digitalCurrencyQuote.total <= bankQuote.total;
-
 			quotes = (
 				<div className='row justify-content-center'>
-					<Quotes title='Bank' {...bankQuote}/>
-					<Quotes title='Digital Currency' {...digitalCurrencyQuote}/>
+					<Quotes title='Bank' {...this.bankQuote}/>
+					<Quotes title='Digital Currency' {...this.digitalCurrencyQuote}/>
 				</div>
 			);
 		}
