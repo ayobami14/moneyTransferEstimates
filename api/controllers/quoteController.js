@@ -3,8 +3,8 @@ const MongoClient = require('mongodb').MongoClient;
 
 const router = express.Router();
 
-const DB_URL = 'mongodb://localhost:27017';
-const DB_NAME = 'transferEstimates';
+const DB_URL = process.env.DATABASE_URL;
+const DB_NAME = process.env.DATABASE_NAME;
 
 let transferEstimatesDatabase;
 
