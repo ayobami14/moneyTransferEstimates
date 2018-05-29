@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const logger = require('morgan');
 const IndexController = require('./api/controllers/indexController.js')
+const QuoteController = require('./api/controllers/quoteController.js')
 
 const app = express();
 
@@ -14,7 +15,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Routes
-app.use('/', IndexController)
+app.use('/', IndexController);
+app.use('/api/quote', QuoteController);
 
 var port = normalizePort(process.env.PORT || '80');
 app.listen(port, () => console.log(`Transfer Estimates listening on port ${port}!`));
