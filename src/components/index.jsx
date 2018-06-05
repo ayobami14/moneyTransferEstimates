@@ -161,7 +161,7 @@ class TransferEstimates extends React.Component {
 		let BTC_BUY_COST = BTC_TO_BUY * BTC_NGN_PRICE;
 
 		let sendAmount = recieveAmount * USD_NGN_RATE;
-		let fees = BTC_BUY_COST - sendAmount;
+		let fees = BTC_BUY_COST > sendAmount ? BTC_BUY_COST - sendAmount : 0;
 		let total = sendAmount + fees;
 
 		sendAmount = sendAmount.toLocaleString("en-US");
